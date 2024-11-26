@@ -48,8 +48,8 @@ public class PrimaryController {
     }
 
     @FXML
-    void showHighScores(ActionEvent event) {
-
+    void showHighScores(ActionEvent event) throws IOException {
+        App.setRoot("secondary");
     }
 
     @FXML
@@ -58,8 +58,8 @@ public class PrimaryController {
     }
 
     @FXML
-    void startGame(ActionEvent event) {
-
+    void startGame(ActionEvent event) throws IOException {
+        App.setRoot( "terciary");
     }
 
 }

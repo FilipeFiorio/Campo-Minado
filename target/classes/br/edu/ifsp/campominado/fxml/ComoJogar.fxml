@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text layoutX="355.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Como Jogar" AnchorPane.topAnchor="128.0">
+         <font>
+            <Font name="Arial Black" size="48.0" />
+         </font>
+      </Text>
+      <Text layoutX="124.0" layoutY="341.0" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="        Campo Minado é um jogo de lógica desafiador onde o objetivo é revelar todas as células do tabuleiro sem clicar em uma mina. O jogo oferece quatro modos de dificuldade: Fácil, Médio, Difícil e Personalizado. Nos modos Fácil, Médio e Difícil, o tamanho do tabuleiro e a quantidade de minas já estão definidos. No modo Personalizado, você pode ajustar o tamanho do tabuleiro e o tempo de jogo, permitindo criar desafios de acordo com sua preferência. Ao clicar em uma célula, ela pode mostrar um número, indicando a quantidade de minas ao redor, ou revelar uma mina, o que termina a partida. O jogo exige raciocínio lógico para deduzir onde as minas estão localizadas. Você pode marcar células com bandeiras, indicando onde acredita que há uma mina. Se conseguir revelar todas as células seguras dentro do tempo determinado, você vence. É uma ótima maneira de exercitar a mente e se divertir ao mesmo tempo!" textAlignment="JUSTIFY" wrappingWidth="776.13671875" AnchorPane.topAnchor="256.0">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+      </Text>
+      <Button fx:id="voltar" layoutX="487.0" layoutY="682.0" mnemonicParsing="false" onAction="#voltar" text="VOLTAR" AnchorPane.bottomAnchor="64.0" AnchorPane.topAnchor="682.0" />
+   </children>
+</AnchorPane>
