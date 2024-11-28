@@ -5,6 +5,7 @@ import br.edu.ifsp.campominado.app2.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.application.Platform;
 
 public class PrimaryController {
 
@@ -27,7 +28,7 @@ public class PrimaryController {
 
     @FXML
     void Jogar(ActionEvent event) throws IOException {
-        
+        App.setRoot( "telaJogar" );
     }
 
     @FXML
@@ -42,7 +43,7 @@ public class PrimaryController {
 
     @FXML
     void sairDoJogo(ActionEvent event) {
-
+        Platform.exit();
     }
 
 

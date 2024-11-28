@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.application.Platform;
 
 public class telaDoJogadorController {
     
@@ -23,6 +24,6 @@ public class telaDoJogadorController {
 
     @FXML
     void sairDoJogo(ActionEvent event) {
-        
+        Platform.exit();
     }
 }
