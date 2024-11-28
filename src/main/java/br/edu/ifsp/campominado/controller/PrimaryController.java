@@ -5,7 +5,6 @@ import br.edu.ifsp.campominado.app2.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 
 public class PrimaryController {
 
@@ -15,51 +14,36 @@ public class PrimaryController {
     }
 
     @FXML
-    private MenuItem audio;
+    private Button botaoComoJogar;
 
     @FXML
-    private MenuItem credits;
+    private Button botaoHighScore;
 
     @FXML
-    private MenuItem exit;
+    private Button botaoJogar;
 
     @FXML
-    private Button highScore;
+    private Button botaoSairDoJogo;
 
     @FXML
-    private MenuItem howToPlay;
-
-    @FXML
-    private Button jogar;
-
-    @FXML
-    void enableAudio(ActionEvent event) {
-
+    void Jogar(ActionEvent event) throws IOException {
+        
     }
 
     @FXML
-    void exitProgram(ActionEvent event) {
-
+    void mostrarComoJogar(ActionEvent event) throws IOException {
+        App.setRoot( "comoJogar");
     }
 
     @FXML
-    void showCredits(ActionEvent event) {
-
-    }
-
-    @FXML
-    void showHighScores(ActionEvent event) throws IOException {
+    void mostrarHighScores(ActionEvent event) throws IOException {
         App.setRoot("secondary");
     }
 
     @FXML
-    void showHowToPlay(ActionEvent event) {
+    void sairDoJogo(ActionEvent event) {
 
     }
 
-    @FXML
-    void startGame(ActionEvent event) throws IOException {
-        App.setRoot( "terciary");
-    }
 
 }
