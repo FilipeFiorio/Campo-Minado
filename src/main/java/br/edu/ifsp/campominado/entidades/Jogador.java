@@ -5,7 +5,7 @@ public class Jogador {
     private String nome; 
     private Pontuacao pontuacao;  
 
-    public Jogador(String nome) {
+    public Jogador(String nome, int pontuacao) {
         this.nome = nome;
         this.pontuacao = new Pontuacao();
     }

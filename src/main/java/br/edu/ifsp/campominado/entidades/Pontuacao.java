@@ -1,11 +1,9 @@
 package br.edu.ifsp.campominado.entidades;
 
 public class Pontuacao {
-
     private int pontos;
     private int multiplicador; 
     private int tempoCombo; 
-
     public Pontuacao() {
         this.pontos = 0;
         this.multiplicador = 1;
@@ -17,12 +15,12 @@ public class Pontuacao {
         System.out.println("Pontos adicionados: " + (pontosBase * this.multiplicador));
         System.out.println("Pontuação atual: " + this.pontos);
     }
-
     public void iniciarCombo() {
         this.multiplicador++;
         this.tempoCombo = 5; 
         System.out.println("Combo iniciado! Multiplicador atual: " + this.multiplicador);
     }
+
     public void finalizarCombo() {
         if (this.tempoCombo <= 0) {
             this.multiplicador = 1;
@@ -42,7 +40,6 @@ public class Pontuacao {
     public int getPontos() {
         return this.pontos;
     }
-
     public void reiniciar() {
         this.pontos = 0;
         this.multiplicador = 1;
