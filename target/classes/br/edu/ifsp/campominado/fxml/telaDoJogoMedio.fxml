@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifsp.campominado.controller.telaDoJogoMedioController">
+   <children>
+      <Label fx:id="lblTempo" layoutX="53.0" layoutY="78.0" prefHeight="18.0" prefWidth="192.0" AnchorPane.leftAnchor="128.0" AnchorPane.topAnchor="64.0">
+         <font>
+            <Font name="Arial Black" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblPontuacao" layoutX="695.0" layoutY="78.0" prefHeight="18.0" prefWidth="192.0" text="PONTUAÇÃO: " AnchorPane.rightAnchor="128.0" AnchorPane.topAnchor="64.0">
+         <font>
+            <Font name="Arial Black" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblMinas" layoutX="447.0" layoutY="77.0" prefHeight="38.0" prefWidth="130.0" text="MINAS:" AnchorPane.leftAnchor="447.0" AnchorPane.rightAnchor="447.4" AnchorPane.topAnchor="64.0">
+         <font>
+            <Font name="Arial Black" size="24.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

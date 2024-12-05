@@ -31,7 +31,7 @@ public class telaJogarController {
 
     @FXML
     void VoltarParaOPrimary(ActionEvent event) throws IOException {
-        App.setRoot("Primary" );
+        App.setRoot( "primary" );
     }
 
     @FXML
@@ -65,17 +65,18 @@ public class telaJogarController {
     }
 
     @FXML
-    void setarDificuldadeDificil(ActionEvent event) {
-
+    void setarDificuldadeDificil(ActionEvent event) throws IOException {
+        App.setRoot( "telaDoJogoDificil" );
     }
 
     @FXML
-    void setarDificuldadeFacil(ActionEvent event) {
-
+    void setarDificuldadeFacil(ActionEvent event) throws IOException {
+        App.setRoot( "telaDoJogoFacil" );
     }
 
     @FXML
-    void setarDificuldadeMedio(ActionEvent event) {
-
+    void setarDificuldadeMedio(ActionEvent event) throws IOException {
+        App.setRoot( "telaDoJogoMedio" );
     }
+
 }
