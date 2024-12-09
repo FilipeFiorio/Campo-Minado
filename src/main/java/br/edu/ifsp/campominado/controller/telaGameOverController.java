@@ -10,18 +10,10 @@ import javafx.scene.control.Button;
 public class telaGameOverController {
     
     @FXML
-    private Button botaoTentarDeNovo;
+    private Button botaoVoltar;
 
     @FXML
-    private Button botaoVoltarInicio;
-
-    @FXML
-    void TentarDeNovo(ActionEvent event) {
-
-    }
-
-    @FXML
-    void voltarInicio(ActionEvent event) throws IOException {
-        App.setRoot( "primary" );
+    void VoltarInicio(ActionEvent event) throws IOException{
+        App.setRoot("primary");
     }
 }
