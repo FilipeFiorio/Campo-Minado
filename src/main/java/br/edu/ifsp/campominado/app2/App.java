@@ -9,12 +9,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * JavaFX App
- */
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class App extends Application {
 
     private static Scene scene;
+
+    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     @Override
     public void start(Stage stage) throws IOException {

@@ -1,37 +1,45 @@
 package br.edu.ifsp.campominado.entidades;
 
+import com.google.gson.annotations.Expose;
+
 public class Jogador {
 
-    private String nome; 
-    private Pontuacao pontuacao;  
+    @Expose
+    private String nome;
 
-    public Jogador(String nome, int pontuacao) {
+    @Expose
+    private int pontuacao;
+
+    @Expose
+    private String dificuldade;
+
+    public Jogador(String nome, int pontuacao, String dificuldade) {
         this.nome = nome;
-        this.pontuacao = new Pontuacao();
+        this.pontuacao = pontuacao;
+        this.dificuldade = dificuldade;
     }
-    public String getNome(){
+
+    public String getNome() {
         return nome;
     }
-    public int getPontuacao(){
-        return pontuacao.getPontos();
-    }
-    public void adicionarPontos(int pontos){
-        pontuacao.adicionarPontos(pontos);
-    }
-    public void reiniciarPontuacao(){
-        pontuacao.reiniciar();
-    }
-    public void iniciarCombo(){
-        pontuacao.iniciarCombo();
-    }
-    public void atualizarCombo(){
-        pontuacao.atualizarTempoCombo();
-    }
-    public void exibirInfo(){
-        System.out.println("Informacoes do jogador");
-        System.out.println("Nome: " + nome);
-        System.out.println("Pontuacao" + getPontuacao());
-    }
-    
-}
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+
+    public String getDificuldade() {
+        return dificuldade;
+    }
+
+    public void setDificuldade(String dificuldade) {
+        this.dificuldade = dificuldade;
+    }
+}
