@@ -387,7 +387,6 @@ public class telaDoJogoDificilController {
     private void inicializarTabuleiro() {
         Random random = new Random();
 
-        // Coloca as minas aleatoriamente
         for (int i = 0; i < minasRestantes; i++) {
             int linha = random.nextInt(10);
             int coluna = random.nextInt(10);
