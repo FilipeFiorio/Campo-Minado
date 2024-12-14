@@ -9,21 +9,11 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.GridPane;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 public class telaDoJogoMedioController {
         
-    @FXML
-    private Label lblMinas;
-
-    @FXML
-    private Label lblPontuacao;
-
-    @FXML
-    private Label lblTempo;
-
     @FXML
     private Button button00;
 
@@ -215,31 +205,40 @@ public class telaDoJogoMedioController {
 
     @FXML
     private Button button77;
-    
+
+    @FXML
+    private Label lblMinas;
+
+    @FXML
+    private Label lblPontuacao;
+
+    @FXML
+    private Label lblTempo;
+
+    private static final int TAMANHO = 8;
     private int[][] tabuleiro;
     private Button[][] botoes;
-    private int minasRestantes = 16;
+    private boolean[][] marcacoes;
+    private int minasRestantes = 13;
     private int pontuacao = 0;
     private int segundos = 50;
     private Timeline timeline;
 
     @FXML
     public void initialize() throws IOException {
-        botoes = new Button[8][8];
-        tabuleiro = new int[8][8];
-        
+        botoes = new Button[TAMANHO][TAMANHO];
+        tabuleiro = new int[TAMANHO][TAMANHO];
+        marcacoes = new boolean[TAMANHO][TAMANHO];
+
         botoes[0][0] = button00; botoes[0][1] = button01; botoes[0][2] = button02; botoes[0][3] = button03; botoes[0][4] = button04;
-        botoes[0][5] = button05; botoes[0][6] = button06; botoes[0][7] = button07;
+        botoes[0][5] = button05; botoes[0][6] = button06; botoes[0][7] = button07; 
         
         botoes[1][0] = button10; botoes[1][1] = button11; botoes[1][2] = button12; botoes[1][3] = button13; botoes[1][4] = button14;
         botoes[1][5] = button15; botoes[1][6] = button16; botoes[1][7] = button17; 
-        
         botoes[2][0] = button20; botoes[2][1] = button21; botoes[2][2] = button22; botoes[2][3] = button23; botoes[2][4] = button24;
         botoes[2][5] = button25; botoes[2][6] = button26; botoes[2][7] = button27; 
-        
         botoes[3][0] = button30; botoes[3][1] = button31; botoes[3][2] = button32; botoes[3][3] = button33; botoes[3][4] = button34;
         botoes[3][5] = button35; botoes[3][6] = button36; botoes[3][7] = button37; 
-        
         botoes[4][0] = button40; botoes[4][1] = button41; botoes[4][2] = button42; botoes[4][3] = button43; botoes[4][4] = button44;
         botoes[4][5] = button45; botoes[4][6] = button46; botoes[4][7] = button47; 
         
@@ -252,8 +251,6 @@ public class telaDoJogoMedioController {
         botoes[7][0] = button70; botoes[7][1] = button71; botoes[7][2] = button72; botoes[7][3] = button73; botoes[7][4] = button74;
         botoes[7][5] = button75; botoes[7][6] = button76; botoes[7][7] = button77; 
         
-    
-     
 
         inicializarTabuleiro();
 
@@ -275,26 +272,25 @@ public class telaDoJogoMedioController {
 
     private void inicializarTabuleiro() {
         Random random = new Random();
-
         for (int i = 0; i < minasRestantes; i++) {
-            int linha = random.nextInt(8);
-            int coluna = random.nextInt(8);
-            if (tabuleiro[linha][coluna] != -1) { 
-                tabuleiro[linha][coluna] = -1;
-            } else {
-                i--;
-            }
+            int linha, coluna;
+            do {
+                linha = random.nextInt(TAMANHO);
+                coluna = random.nextInt(TAMANHO);
+            } while (tabuleiro[linha][coluna] == -1);
+
+            tabuleiro[linha][coluna] = -1;
         }
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
                 if (tabuleiro[i][j] != -1) {
                     int count = 0;
                     for (int di = -1; di <= 1; di++) {
                         for (int dj = -1; dj <= 1; dj++) {
                             int ni = i + di;
                             int nj = j + dj;
-                            if (ni >= 0 && ni < 8 && nj >= 0 && nj < 8) {
+                            if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
                                 if (tabuleiro[ni][nj] == -1) {
                                     count++;
                                 }
@@ -307,22 +303,39 @@ public class telaDoJogoMedioController {
         }
     }
 
+    private boolean primeiraJogada = true;
+
     private void revelarCelula(int row, int col) {
+        if (botoes[row][col].isDisabled()) {
+            return;
+        }
+    
+        if (primeiraJogada) {
+            primeiraJogada = false;
+            garantirPrimeiraCelulaSegura(row, col);
+        }
+    
+        botoes[row][col].setDisable(true);
+    
         if (tabuleiro[row][col] == -1) {
-            botoes[row][col].setText("Bomba");
             botoes[row][col].setStyle("-fx-background-color: red;");
+            timeline.stop();
+            try {
+                App.setRoot("telaGameOver");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             botoes[row][col].setText(String.valueOf(tabuleiro[row][col]));
-            botoes[row][col].setDisable(true);
-            pontuacao += 100; 
-            lblPontuacao.setText("Pontuação: " + pontuacao); 
-            
+            pontuacao += 100;
+            lblPontuacao.setText("Pontos: " + pontuacao);
+    
             if (tabuleiro[row][col] == 0) {
                 for (int di = -1; di <= 1; di++) {
                     for (int dj = -1; dj <= 1; dj++) {
                         int ni = row + di;
                         int nj = col + dj;
-                        if (ni >= 0 && ni < 8 && nj >= 0 && nj < 8 && !botoes[ni][nj].isDisabled()) {
+                        if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
                             revelarCelula(ni, nj);
                         }
                     }
@@ -331,34 +344,95 @@ public class telaDoJogoMedioController {
         }
     }
     
-
-    private void marcarCelula(int row, int col) {
-        Button btn = botoes[row][col];
-        if (!btn.isDisabled()) { 
-            if (!btn.getStyle().contains("yellow")) {
-                btn.setStyle("-fx-background-color: yellow;");
-                minasRestantes--;
-                lblMinas.setText("Minas restantes: " + minasRestantes);
-            } else {
-                btn.setStyle(""); 
-                minasRestantes++;
-                lblMinas.setText("Minas restantes: " + minasRestantes);
+    private void garantirPrimeiraCelulaSegura(int row, int col) {
+    
+        for (int di = -1; di <= 1; di++) {
+            for (int dj = -1; dj <= 1; dj++) {
+                int ni = row + di;
+                int nj = col + dj;
+                if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
+                    if (tabuleiro[ni][nj] == -1) {
+                        moverBomba(ni, nj);
+                    }
+                }
+            }
+        }
+    
+        atualizarTabuleiro();
+    }
+    
+    private void moverBomba(int row, int col) {
+        Random random = new Random();
+        int novaLinha, novaColuna;
+        do {
+            novaLinha = random.nextInt(TAMANHO);
+            novaColuna = random.nextInt(TAMANHO);
+        } while (tabuleiro[novaLinha][novaColuna] == -1 || 
+                 (Math.abs(novaLinha - row) <= 1 && Math.abs(novaColuna - col) <= 1));
+        tabuleiro[row][col] = 0;
+        tabuleiro[novaLinha][novaColuna] = -1;
+    }
+    
+    private void atualizarTabuleiro() {
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
+                if (tabuleiro[i][j] != -1) {
+                    int count = 0;
+                    for (int di = -1; di <= 1; di++) {
+                        for (int dj = -1; dj <= 1; dj++) {
+                            int ni = i + di;
+                            int nj = j + dj;
+                            if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
+                                if (tabuleiro[ni][nj] == -1) {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    tabuleiro[i][j] = count;
+                }
             }
         }
     }
 
-    @FXML
-    public void onButtonClick(javafx.scene.input.MouseEvent event) {
-        Button clickedButton = (Button) event.getSource();
-        int row = GridPane.getRowIndex(clickedButton);
-        int col = GridPane.getColumnIndex(clickedButton);
+    private void marcarCelula(int row, int col) {
+        if (!botoes[row][col].isDisabled()) {
+            if (!marcacoes[row][col]) {
+                marcacoes[row][col] = true;
+                botoes[row][col].setStyle("-fx-background-color: yellow;");
+                minasRestantes--;
+            } else {
+                marcacoes[row][col] = false;
+                botoes[row][col].setStyle("");
+                minasRestantes++;
+            }
+            lblMinas.setText("Minas: " + minasRestantes);
+        }
+    }
 
-        if (event.getButton() == MouseButton.PRIMARY) {
+    @FXML
+    public void onButtonClick(MouseEvent event) {
+        Button clickedButton = (Button) event.getSource();
+
+        int row = -1, col = -1;
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
+                if (botoes[i][j] == clickedButton) {
+                    row = i;
+                    col = j;
+                    break;
+                }
+            }
+        }
+
+        if (row == -1 || col == -1) {
+            return;
+        }
+
+        if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
             revelarCelula(row, col);
-            System.out.println( "revelado");
-        } else if (event.getButton() == MouseButton.SECONDARY) {
+        } else if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
             marcarCelula(row, col);
-            System.out.println( "marcado");
         }
     }
 }

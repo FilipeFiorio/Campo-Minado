@@ -13,6 +13,14 @@ public class comoJogarController {
     private Button botaoVoltar;
 
     @FXML
+    private Button botaoSeta;
+
+    @FXML
+    void proximaPagina(ActionEvent event) throws IOException{
+        App.setRoot( "ComoJogar2" );
+    }
+
+    @FXML
     void voltarParaTelaPrimary(ActionEvent event) throws IOException {
         App.setRoot( "primary");
     }

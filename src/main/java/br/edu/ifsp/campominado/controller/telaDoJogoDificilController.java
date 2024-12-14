@@ -9,8 +9,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.GridPane;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 public class telaDoJogoDificilController {
@@ -324,8 +323,10 @@ public class telaDoJogoDificilController {
     @FXML
     private Button button99;
     
+    private static final int TAMANHO = 10;
     private int[][] tabuleiro;
     private Button[][] botoes;
+    private boolean[][] marcacoes;
     private int minasRestantes = 25;
     private int pontuacao = 0;
     private int segundos = 30;
@@ -333,9 +334,10 @@ public class telaDoJogoDificilController {
 
     @FXML
     public void initialize() throws IOException {
-        botoes = new Button[10][10];
-        tabuleiro = new int[10][10];
-        
+        botoes = new Button[TAMANHO][TAMANHO];
+        tabuleiro = new int[TAMANHO][TAMANHO];
+        marcacoes = new boolean[TAMANHO][TAMANHO];
+
         botoes[0][0] = button00; botoes[0][1] = button01; botoes[0][2] = button02; botoes[0][3] = button03; botoes[0][4] = button04;
         botoes[0][5] = button05; botoes[0][6] = button06; botoes[0][7] = button07; botoes[0][8] = button08; botoes[0][9] = button09;
         
@@ -386,26 +388,25 @@ public class telaDoJogoDificilController {
 
     private void inicializarTabuleiro() {
         Random random = new Random();
-
         for (int i = 0; i < minasRestantes; i++) {
-            int linha = random.nextInt(10);
-            int coluna = random.nextInt(10);
-            if (tabuleiro[linha][coluna] != -1) { 
-                tabuleiro[linha][coluna] = -1;
-            } else {
-                i--;
-            }
+            int linha, coluna;
+            do {
+                linha = random.nextInt(TAMANHO);
+                coluna = random.nextInt(TAMANHO);
+            } while (tabuleiro[linha][coluna] == -1);
+
+            tabuleiro[linha][coluna] = -1;
         }
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
                 if (tabuleiro[i][j] != -1) {
                     int count = 0;
                     for (int di = -1; di <= 1; di++) {
                         for (int dj = -1; dj <= 1; dj++) {
                             int ni = i + di;
                             int nj = j + dj;
-                            if (ni >= 0 && ni < 10 && nj >= 0 && nj < 10) {
+                            if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
                                 if (tabuleiro[ni][nj] == -1) {
                                     count++;
                                 }
@@ -418,22 +419,39 @@ public class telaDoJogoDificilController {
         }
     }
 
+    private boolean primeiraJogada = true;
+
     private void revelarCelula(int row, int col) {
+        if (botoes[row][col].isDisabled()) {
+            return;
+        }
+    
+        if (primeiraJogada) {
+            primeiraJogada = false;
+            garantirPrimeiraCelulaSegura(row, col);
+        }
+    
+        botoes[row][col].setDisable(true);
+    
         if (tabuleiro[row][col] == -1) {
-            botoes[row][col].setText("Bomba");
             botoes[row][col].setStyle("-fx-background-color: red;");
+            timeline.stop();
+            try {
+                App.setRoot("telaGameOver");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             botoes[row][col].setText(String.valueOf(tabuleiro[row][col]));
-            botoes[row][col].setDisable(true);
-            pontuacao += 100; 
-            lblPontuacao.setText("Pontuação: " + pontuacao); 
-            
+            pontuacao += 100;
+            lblPontuacao.setText("Pontos: " + pontuacao);
+    
             if (tabuleiro[row][col] == 0) {
                 for (int di = -1; di <= 1; di++) {
                     for (int dj = -1; dj <= 1; dj++) {
                         int ni = row + di;
                         int nj = col + dj;
-                        if (ni >= 0 && ni < 10 && nj >= 0 && nj < 10 && !botoes[ni][nj].isDisabled()) {
+                        if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
                             revelarCelula(ni, nj);
                         }
                     }
@@ -442,34 +460,95 @@ public class telaDoJogoDificilController {
         }
     }
     
-
-    private void marcarCelula(int row, int col) {
-        Button btn = botoes[row][col];
-        if (!btn.isDisabled()) { 
-            if (!btn.getStyle().contains("yellow")) {
-                btn.setStyle("-fx-background-color: yellow;");
-                minasRestantes--;
-                lblMinas.setText("Minas restantes: " + minasRestantes);
-            } else {
-                btn.setStyle(""); 
-                minasRestantes++;
-                lblMinas.setText("Minas restantes: " + minasRestantes);
+    private void garantirPrimeiraCelulaSegura(int row, int col) {
+    
+        for (int di = -1; di <= 1; di++) {
+            for (int dj = -1; dj <= 1; dj++) {
+                int ni = row + di;
+                int nj = col + dj;
+                if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
+                    if (tabuleiro[ni][nj] == -1) {
+                        moverBomba(ni, nj);
+                    }
+                }
+            }
+        }
+    
+        atualizarTabuleiro();
+    }
+    
+    private void moverBomba(int row, int col) {
+        Random random = new Random();
+        int novaLinha, novaColuna;
+        do {
+            novaLinha = random.nextInt(TAMANHO);
+            novaColuna = random.nextInt(TAMANHO);
+        } while (tabuleiro[novaLinha][novaColuna] == -1 || 
+                 (Math.abs(novaLinha - row) <= 1 && Math.abs(novaColuna - col) <= 1));
+        tabuleiro[row][col] = 0;
+        tabuleiro[novaLinha][novaColuna] = -1;
+    }
+    
+    private void atualizarTabuleiro() {
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
+                if (tabuleiro[i][j] != -1) {
+                    int count = 0;
+                    for (int di = -1; di <= 1; di++) {
+                        for (int dj = -1; dj <= 1; dj++) {
+                            int ni = i + di;
+                            int nj = j + dj;
+                            if (ni >= 0 && ni < TAMANHO && nj >= 0 && nj < TAMANHO) {
+                                if (tabuleiro[ni][nj] == -1) {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    tabuleiro[i][j] = count;
+                }
             }
         }
     }
 
-    @FXML
-    public void onButtonClick(javafx.scene.input.MouseEvent event) {
-        Button clickedButton = (Button) event.getSource();
-        int row = GridPane.getRowIndex(clickedButton);
-        int col = GridPane.getColumnIndex(clickedButton);
+    private void marcarCelula(int row, int col) {
+        if (!botoes[row][col].isDisabled()) {
+            if (!marcacoes[row][col]) {
+                marcacoes[row][col] = true;
+                botoes[row][col].setStyle("-fx-background-color: yellow;");
+                minasRestantes--;
+            } else {
+                marcacoes[row][col] = false;
+                botoes[row][col].setStyle("");
+                minasRestantes++;
+            }
+            lblMinas.setText("Minas: " + minasRestantes);
+        }
+    }
 
-        if (event.getButton() == MouseButton.PRIMARY) {
+    @FXML
+    public void onButtonClick(MouseEvent event) {
+        Button clickedButton = (Button) event.getSource();
+
+        int row = -1, col = -1;
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
+                if (botoes[i][j] == clickedButton) {
+                    row = i;
+                    col = j;
+                    break;
+                }
+            }
+        }
+
+        if (row == -1 || col == -1) {
+            return;
+        }
+
+        if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
             revelarCelula(row, col);
-            System.out.println( "revelado");
-        } else if (event.getButton() == MouseButton.SECONDARY) {
+        } else if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
             marcarCelula(row, col);
-            System.out.println( "marcado");
         }
     }
 }
