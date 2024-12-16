@@ -20,7 +20,7 @@
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button fx:id="botaoHighScore" layoutX="350.0" layoutY="462.0" mnemonicParsing="false" onAction="#mostrarHighScores" text="HIGH SCORE" AnchorPane.bottomAnchor="238.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0">
+      <Button fx:id="botaoHighScore" disable="true" layoutX="350.0" layoutY="462.0" mnemonicParsing="false" onAction="#mostrarHighScores" text="HIGH SCORE" AnchorPane.bottomAnchor="238.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0">
          <font>
             <Font name="Arial Black" size="32.0" />
          </font>

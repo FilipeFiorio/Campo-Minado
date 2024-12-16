@@ -1,1 +1,9 @@
-{"nome":"oi","pontuacao":100,"dificuldade":"Média"}
+{
+  "nome": "aaa",
+  "partidas": [
+    {
+      "dificuldade": "Média",
+      "pontuacao": 0
+    }
+  ]
+}

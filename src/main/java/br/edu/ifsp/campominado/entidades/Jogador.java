@@ -1,45 +1,21 @@
 package br.edu.ifsp.campominado.entidades;
 
-import com.google.gson.annotations.Expose;
+import java.util.List;
 
 public class Jogador {
-
-    @Expose
     private String nome;
+    private List<Partida> partidas;
 
-    @Expose
-    private int pontuacao;
-
-    @Expose
-    private String dificuldade;
-
-    public Jogador(String nome, int pontuacao, String dificuldade) {
+    public Jogador(String nome, List<Partida> partidas) {
         this.nome = nome;
-        this.pontuacao = pontuacao;
-        this.dificuldade = dificuldade;
+        this.partidas = partidas;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public int getPontuacao() {
-        return pontuacao;
-    }
-
-    public void setPontuacao(int pontuacao) {
-        this.pontuacao = pontuacao;
-    }
-
-    public String getDificuldade() {
-        return dificuldade;
-    }
-
-    public void setDificuldade(String dificuldade) {
-        this.dificuldade = dificuldade;
+    public List<Partida> getPartidas() {
+        return partidas;
     }
 }

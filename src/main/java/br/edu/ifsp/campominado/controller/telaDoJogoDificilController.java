@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import br.edu.ifsp.campominado.app2.App;
+import br.edu.ifsp.campominado.entidades.GameData;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -329,7 +330,7 @@ public class telaDoJogoDificilController {
     private boolean[][] marcacoes;
     private int minasRestantes = 25;
     private int pontuacao = 0;
-    private int segundos = 30;
+    private int segundos = 40;
     private Timeline timeline;
 
     @FXML
@@ -369,6 +370,9 @@ public class telaDoJogoDificilController {
         botoes[9][5] = button95; botoes[9][6] = button96; botoes[9][7] = button97; botoes[9][8] = button98; botoes[9][9] = button99;
 
         inicializarTabuleiro();
+
+        lblPontuacao.setText("Pontos: " + pontuacao);
+        lblMinas.setText("Minas: " + minasRestantes);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             segundos--;
@@ -445,6 +449,7 @@ public class telaDoJogoDificilController {
             botoes[row][col].setText(String.valueOf(tabuleiro[row][col]));
             pontuacao += 100;
             lblPontuacao.setText("Pontos: " + pontuacao);
+            GameData.setPontuacao( pontuacao );
     
             if (tabuleiro[row][col] == 0) {
                 for (int di = -1; di <= 1; di++) {
@@ -457,6 +462,8 @@ public class telaDoJogoDificilController {
                     }
                 }
             }
+
+            verificarFimDoJogo();
         }
     }
     
@@ -549,6 +556,27 @@ public class telaDoJogoDificilController {
             revelarCelula(row, col);
         } else if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
             marcarCelula(row, col);
+        }
+    }
+
+    private void verificarFimDoJogo() {
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
+                if (tabuleiro[i][j] != -1 && !botoes[i][j].isDisabled()) {
+                    return;
+                }
+            }
+        }
+    
+        timeline.stop();
+
+        pontuacao = pontuacao + segundos * 30;
+
+        try {
+            GameData.setPontuacao(pontuacao); 
+            App.setRoot("telaDeVitoria");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
